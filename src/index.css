@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 html {
   scroll-behavior: smooth;
@@ -10,9 +10,7 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-.font-serif {
-  font-family: 'Playfair Display', serif;
-}
+
 
 .bg-grid {
   background-color: #0A1628;
@@ -267,15 +265,16 @@ body {
 }
 
 .excellence-bg {
-  background-color: #f1f5f9;
-  background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80');
+  background-color: #0A1628;
+  background-image: linear-gradient(to bottom, rgba(10, 22, 40, 0.75) 0%, rgba(10, 22, 40, 0.82) 100%),
+    url('https://images.unsplash.com/photo-1609710228159-0fa9bd7c0827?w=1600&q=80');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .excellence-backdrop {
-  background: rgba(248, 250, 252, 0.88);
+  background: rgba(10, 22, 40, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -483,4 +482,87 @@ body {
 
 .section-light {
   background-color: #f8fafc;
+}
+
+/* Marquee Animation for Country Flags */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee {
+  animation: marquee 20s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Reverse Marquee Animation */
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-25%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.marquee-reverse {
+  animation: marquee-reverse 20s linear infinite;
+  will-change: transform;
+}
+
+.marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Enhanced Player Card Animations */
+.player-card {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease;
+}
+
+.player-card:hover {
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.2);
+}
+
+/* Enhanced Improve Card Overlay */
+.improve-card-overlay {
+  transition: background 0.5s ease;
+}
+
+.improve-card:hover .improve-card-overlay {
+  background: linear-gradient(to top, rgba(2, 6, 23, 0.98) 0%, rgba(15, 23, 42, 0.5) 60%, rgba(15, 23, 42, 0.2) 100%);
+}
+
+/* Timeline Card Smooth Animations */
+.timeline-card-hidden {
+  opacity: 0;
+  transform: translateY(80px) scale(0.9);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: opacity 2s ease-out, transform 2s ease-out, box-shadow 1.5s ease-out;
+}
+
+.timeline-card-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.1);
+  transition: opacity 2s ease-out, transform 2s ease-out, box-shadow 1.5s ease-out;
 }
