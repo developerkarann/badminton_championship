@@ -338,6 +338,74 @@ function TournamentAgendaSection({ onNav }) {
             </div>
           </div>
         </div>
+
+        {/* Prize Distribution Section */}
+        <div className={`relative mt-16 overflow-hidden rounded-3xl ${revealed ? 'reveal revealed' : 'reveal'}`}>
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1200&q=80"
+              alt=""
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10, 22, 40, 0.85) 0%, rgba(10, 22, 40, 0.92) 100%)' }} />
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 p-10 lg:p-16">
+            <h3 className="text-center text-3xl font-bold text-white lg:text-5xl">Prize Distribution</h3>
+            <p className="mt-3 text-center text-lg text-white/70">Compete for glory and incredible rewards</p>
+
+            <div className="mt-14 flex flex-col items-end justify-center gap-8 md:flex-row md:items-end pb-8">
+              {/* 2nd Place - Runner-up (Left) */}
+              <div className="w-full md:w-1/3">
+                <div className="h-[320px] rounded-2xl border border-slate-400/30 bg-gradient-to-b from-slate-500/20 to-slate-600/30 p-8 text-center backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-slate-300/50 flex flex-col items-center justify-center">
+                  {/* Silver Medal Icon */}
+                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg shadow-slate-400/30">
+                    <svg className="h-14 w-14 text-slate-700" fill="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="8" r="6" />
+                      <path d="M9 14l-3 8h3l3-4 3 4h3l-3-8H9z" />
+                    </svg>
+                  </div>
+                  <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-400/50 text-xl font-bold text-white">2</div>
+                  <p className="mt-4 text-xl font-semibold text-white">Runner-up</p>
+                  <p className="mt-3 text-4xl font-bold text-slate-200">$400,000</p>
+                </div>
+              </div>
+
+              {/* 1st Place - Champion (Center, Elevated) */}
+              <div className="w-full md:w-1/3">
+                <div className="h-[420px] rounded-2xl border-2 bg-gradient-to-b from-amber-500/30 to-yellow-600/20 p-10 text-center backdrop-blur-sm transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center" style={{ borderColor: GOLD_LIGHT }}>
+                  {/* Gold Trophy Icon */}
+                  <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full shadow-lg shadow-amber-400/40" style={{ background: `linear-gradient(135deg, ${GOLD_LIGHT} 0%, #B8860B 100%)` }}>
+                    <svg className="h-16 w-16 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
+                    </svg>
+                  </div>
+                  <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-bold text-slate-900" style={{ backgroundColor: GOLD_LIGHT }}>1</div>
+                  <p className="mt-4 text-2xl font-bold" style={{ color: GOLD_LIGHT }}>Champion</p>
+                  <p className="mt-3 text-5xl font-bold" style={{ color: GOLD_LIGHT }}>$800,000</p>
+                </div>
+              </div>
+
+              {/* 3rd Place (Right) */}
+              <div className="w-full md:w-1/3">
+                <div className="h-[320px] rounded-2xl border border-amber-700/30 bg-gradient-to-b from-amber-800/20 to-amber-900/30 p-8 text-center backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-amber-600/50 flex flex-col items-center justify-center">
+                  {/* Bronze Medal Icon */}
+                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-amber-800 shadow-lg shadow-amber-700/30">
+                    <svg className="h-14 w-14 text-amber-200" fill="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="8" r="6" />
+                      <path d="M9 14l-3 8h3l3-4 3 4h3l-3-8H9z" />
+                    </svg>
+                  </div>
+                  <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-700/50 text-xl font-bold text-white">3</div>
+                  <p className="mt-4 text-xl font-semibold text-white">Third Place</p>
+                  <p className="mt-3 text-4xl font-bold" style={{ color: '#CD7F32' }}>$200,000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
