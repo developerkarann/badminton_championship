@@ -1,0 +1,33 @@
+{
+  "title": "Shuttle Masters Championship",
+  "url": "https://worldbedmintonbyag.my.canva.site/5pages",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 2
+  },
+  "counts": {
+    "elements": 149
+  },
+  "samples": {
+    "fonts": [
+      "\"Times New Roman\"",
+      "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif"
+    ],
+    "fontSizes": [
+      "10px",
+      "12px",
+      "13.3333px",
+      "14px",
+      "24px"
+    ],
+    "colors": [
+      "rgb(0, 0, 0)",
+      "rgb(0, 0, 238)",
+      "rgb(13, 18, 22)",
+      "rgb(14, 19, 24)",
+      "rgb(255, 255, 255)",
+      "rgba(14, 19, 24, 0.7)"
+    ]
+  }
+}
