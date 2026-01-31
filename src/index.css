@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
 
 html {
   scroll-behavior: smooth;
@@ -7,29 +7,161 @@ html {
 
 body {
   font-size: 16px;
+  font-family: 'Manrope', sans-serif;
+  line-height: 160%;
+}
+
+/* Typography System - Manrope (Primary) */
+.font-manrope {
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Typography System - Inter (Secondary) */
+.font-inter {
   font-family: 'Inter', sans-serif;
+}
+
+/* Heading Styles (Manrope) */
+.text-h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 120%;
+}
+
+.text-h2 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 125%;
+}
+
+.text-h3 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 130%;
+}
+
+.text-h4 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 135%;
+}
+
+.text-h5 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.text-h6 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+/* Body Text (Manrope) */
+.text-body-lg {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.text-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.text-body-sm {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+/* UI & Meta Text (Inter) */
+.text-ui {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.text-caption {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.text-overline {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 140%;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Button Text (Manrope) */
+.text-btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Form Typography (Design Spec) */
+.form-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.form-input {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.form-helper {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.form-error {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
 }
 
 
 
 .bg-grid {
-  background-color: #0A1628;
+  background-color: #08162A;
 }
 
 .section-dark {
-  background-color: #0A1628;
+  background-color: #08162A;
+}
+
+.section-light {
+  background-color: #0B1C33;
 }
 
 .bg-rings {
   background-image:
-    radial-gradient(circle at 12% 42%, rgba(251, 191, 36, 0.12) 0 2px, transparent 2px 120px, transparent 120px),
-    radial-gradient(circle at 88% 62%, rgba(251, 191, 36, 0.08) 0 2px, transparent 2px 150px, transparent 120px);
+    radial-gradient(circle at 12% 42%, rgba(230, 195, 90, 0.12) 0 2px, transparent 2px 120px, transparent 120px),
+    radial-gradient(circle at 88% 62%, rgba(230, 195, 90, 0.08) 0 2px, transparent 2px 150px, transparent 120px);
   background-repeat: no-repeat;
 }
 
 .bg-hero {
-  background-color: #0A1628;
-  background-image: linear-gradient(to bottom, rgba(10, 22, 40, 0.72) 0%, rgba(10, 22, 40, 0.65) 50%, rgba(10, 22, 40, 0.78) 100%),
+  background-color: #08162A;
+  background-image: linear-gradient(to bottom, rgba(8, 22, 42, 0.72) 0%, rgba(8, 22, 42, 0.65) 50%, rgba(8, 22, 42, 0.78) 100%),
     url('https://thanksfortoday.studio/smashline/wp-content/uploads/sites/81/2025/10/Hero1-1.jpg');
   background-size: 100%;
   background-position: center;
@@ -37,12 +169,12 @@ body {
 }
 
 .bg-stripes {
-  background-color: #0A1628;
+  background-color: #08162A;
   background-image: repeating-linear-gradient(-45deg,
       transparent,
       transparent 12px,
-      rgba(188, 157, 55, 0.06) 12px,
-      rgba(188, 157, 55, 0.06) 24px);
+      rgba(230, 195, 90, 0.06) 12px,
+      rgba(230, 195, 90, 0.06) 24px);
 }
 
 @keyframes floatDownUp {
@@ -83,11 +215,11 @@ body {
 
   0%,
   100% {
-    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.3));
+    filter: drop-shadow(0 0 12px rgba(230, 195, 90, 0.3));
   }
 
   50% {
-    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.5));
+    filter: drop-shadow(0 0 24px rgba(230, 195, 90, 0.5));
   }
 }
 
@@ -159,7 +291,7 @@ body {
 }
 
 .hero-cta:hover {
-  box-shadow: 0 0 28px rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 28px rgba(230, 195, 90, 0.45);
 }
 
 @keyframes fadeInUp {
@@ -197,7 +329,7 @@ body {
 
 .btn-gold:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 8px 24px rgba(230, 195, 90, 0.35);
   opacity: 0.95;
 }
 
@@ -206,7 +338,7 @@ body {
 }
 
 .btn-outline-gold:hover {
-  background-color: rgba(212, 175, 55, 0.15);
+  background-color: rgba(230, 195, 90, 0.15);
   transform: translateY(-1px);
 }
 
@@ -216,12 +348,12 @@ body {
 
 .card-hover:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(230, 195, 90, 0.15);
 }
 
 .why-card:hover {
-  border-color: rgba(212, 175, 55, 0.7);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.35), 0 0 32px rgba(212, 175, 55, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-color: rgba(230, 195, 90, 0.7);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.35), 0 0 32px rgba(230, 195, 90, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .why-card:hover .why-card-glow {
@@ -230,18 +362,18 @@ body {
 
 .why-card:hover .why-card-icon {
   transform: scale(1.08);
-  box-shadow: 0 0 24px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 0 24px rgba(230, 195, 90, 0.25);
 }
 
 .schedule-card {
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(230, 195, 90, 0.2);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.3s ease;
 }
 
 .schedule-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.25);
-  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(230, 195, 90, 0.25);
+  border-color: rgba(230, 195, 90, 0.4);
 }
 
 .schedule-card:hover .img-zoom {
@@ -250,18 +382,18 @@ body {
 
 .schedule-btn:hover {
   background-color: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.25), 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px rgba(230, 195, 90, 0.25), 0 4px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
 .tournament-round-card:hover {
-  border-color: rgba(212, 175, 55, 0.5);
-  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(212, 175, 55, 0.2);
+  border-color: rgba(230, 195, 90, 0.5);
+  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(230, 195, 90, 0.2);
 }
 
 .tournament-finale-card:hover {
-  border-color: rgba(212, 175, 55, 0.5);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 32px rgba(212, 175, 55, 0.1);
+  border-color: rgba(230, 195, 90, 0.5);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 32px rgba(230, 195, 90, 0.1);
 }
 
 .excellence-bg {
@@ -285,8 +417,8 @@ body {
 
 .excellence-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 28px 56px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(212, 175, 55, 0.25);
-  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 28px 56px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(230, 195, 90, 0.25);
+  border-color: rgba(230, 195, 90, 0.4);
 }
 
 .excellence-card-img {
@@ -540,7 +672,7 @@ body {
 }
 
 .player-card:hover {
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(230, 195, 90, 0.2);
 }
 
 /* Enhanced Improve Card Overlay */
@@ -563,6 +695,6 @@ body {
 .timeline-card-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(230, 195, 90, 0.1);
   transition: opacity 2s ease-out, transform 2s ease-out, box-shadow 1.5s ease-out;
 }

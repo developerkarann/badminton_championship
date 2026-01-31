@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-const GOLD = '#BC9D37';
-const GOLD_LIGHT = '#D4AF37';
-const BORDER = '#31352b';
-const BG_DARK = '#0A1628';
-const BG_CARD = 'rgba(17, 37, 62, 0.65)';
+// Midnight Gold Championship Palette
+const GOLD = '#E6C35A';           // Championship Gold (Primary)
+const GOLD_LIGHT = '#F2D46B';     // Championship Gold (Light)
+const BORDER = '#1E3A5F';         // Border color
+const BG_DARK = '#08162A';        // Midnight Navy (Primary)
+const BG_SECONDARY = '#0B1C33';   // Midnight Navy (Secondary)
+const BG_CARD = 'rgba(11, 28, 51, 0.75)';
 
 const NAV = [
   { id: 'home', label: 'Home' },
@@ -67,8 +69,11 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const onNav = (id) => {
     setActive(id);
+    setMobileMenuOpen(false);
     window.history.replaceState(null, '', `#${id}`);
     scrollToSection(id);
   };
@@ -78,17 +83,37 @@ function App() {
       <div className="relative overflow-hidden bg-grid">
         <div className="pointer-events-none absolute inset-0 bg-rings opacity-50" />
         <header className="sticky top-0 z-50 border-b transition-smooth" style={{ backgroundColor: BG_DARK, borderColor: BORDER }}>
-          <div className="mx-auto flex max-w-[1320px] items-center justify-between px-6 py-4 lg:px-8">
-            <button type="button" onClick={() => onNav('home')} className="flex shrink-0 items-center gap-3 text-left transition-smooth hover:opacity-90">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 text-sm font-bold" style={{ borderColor: GOLD_LIGHT, color: GOLD_LIGHT }}>
+          <div className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+            <button type="button" onClick={() => onNav('home')} className="flex shrink-0 items-center gap-2 sm:gap-3 text-left transition-smooth hover:opacity-90">
+              <div className="grid h-8 w-8 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full border-2 text-xs sm:text-sm font-bold" style={{ borderColor: GOLD_LIGHT, color: GOLD_LIGHT }}>
                 SM
               </div>
               <div>
-                <div className="text-lg font-bold tracking-wide" style={{ color: GOLD_LIGHT }}>Shuttle Masters</div>
-                <div className="-mt-0.5 text-[11px] font-medium tracking-[0.25em] text-white/90">CHAMPIONSHIP 2025</div>
+                <div className="text-base sm:text-lg font-bold tracking-wide" style={{ color: GOLD_LIGHT }}>Shuttle Masters</div>
+                <div className="-mt-0.5 text-[9px] sm:text-[11px] font-medium tracking-[0.25em] text-white/90">CHAMPIONSHIP 2025</div>
               </div>
             </button>
-            <nav className="flex items-center gap-8">
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg border transition-smooth"
+              style={{ borderColor: BORDER }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+              aria-label="Toggle menu"
+            >
+              <svg className={`w-5 h-5 text-white transition-transform duration-300 ${mobileMenuOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-8">
               {NAV.map((item) => (
                 <button
                   key={item.id}
@@ -101,6 +126,34 @@ function App() {
               ))}
             </nav>
           </div>
+
+          {/* Mobile Navigation */}
+          <nav
+            className={`lg:hidden border-t overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen
+              ? 'max-h-96 opacity-100'
+              : 'max-h-0 opacity-0'
+              }`}
+            style={{ borderColor: mobileMenuOpen ? BORDER : 'transparent', backgroundColor: BG_DARK }}
+          >
+            <div className="px-4 py-4 flex flex-col gap-2">
+              {NAV.map((item, index) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onNav(item.id)}
+                  className={`py-3 px-4 text-left text-sm font-medium rounded-lg transition-all duration-300 ${active === item.id ? 'text-white' : 'text-white/70 hover:text-white hover:bg-white/5'}`}
+                  style={{
+                    ...(active === item.id ? { backgroundColor: 'rgba(230, 195, 90, 0.15)', color: GOLD_LIGHT } : {}),
+                    transitionDelay: mobileMenuOpen ? `${index * 50}ms` : '0ms',
+                    transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-10px)',
+                    opacity: mobileMenuOpen ? 1 : 0
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </nav>
         </header>
 
         <main>
@@ -137,7 +190,15 @@ function HeroSection({ onNav }) {
   const [ref, revealed] = useReveal();
   const stagger = (i) => ({ transitionDelay: `${i * 80}ms` });
   return (
-    <div className="relative flex min-h-[90vh] flex-col items-center justify-center bg-hero bg-cover bg-center px-6 py-20 lg:py-28">
+    <div
+      className="relative flex min-h-[100vh] sm:min-h-[90vh] flex-col items-center justify-center bg-cover bg-center px-4 sm:px-6 py-16 sm:py-20 lg:py-28"
+      style={{
+        backgroundImage: `url(${BADMINTON_IMAGES.shuttle8Verticle})`
+      }}
+    >
+      {/* Desktop background - only visible on sm+ screens */}
+      <div className="hidden sm:block absolute inset-0 bg-hero bg-cover bg-center" />
+      <div className="absolute inset-0 bg-slate-950/70 sm:bg-slate-950/50" />
       <div className="absolute inset-0 bg-rings opacity-35" />
       <div className="pointer-events-none absolute left-0 top-24 hidden lg:block" style={{ zIndex: 0 }}>
         <div className="animate-float-slow h-32 w-32 rounded-full border-2 opacity-25" style={{ borderColor: GOLD_LIGHT }} />
@@ -146,15 +207,15 @@ function HeroSection({ onNav }) {
         <div className="animate-float-slow h-40 w-40 rounded-full border-2 opacity-20" style={{ borderColor: GOLD_LIGHT }} />
       </div>
       <div ref={ref} className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center">
-        <div className={`hero-stagger inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-white ${revealed ? 'hero-reveal' : ''}`} style={{ backgroundColor: GOLD_LIGHT, ...stagger(0) }}>
+        <div className={`hero-stagger inline-flex items-center gap-2 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white ${revealed ? 'hero-reveal' : ''}`} style={{ backgroundColor: GOLD, ...stagger(0) }}>
           World&apos;s Premier Badminton Event
         </div>
-        <div className={`hero-stagger mt-8 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-0 ${revealed ? 'hero-reveal' : ''}`} style={stagger(1)}>
-          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl hero-glow" style={{ color: GOLD_LIGHT }}>
+        <div className={`hero-stagger mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-center sm:items-baseline justify-center gap-x-2 gap-y-1 sm:gap-y-0 ${revealed ? 'hero-reveal' : ''}`} style={stagger(1)}>
+          <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight hero-glow drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]" style={{ color: GOLD_LIGHT }}>
             Shuttle Masters
           </h1>
-          <span className="text-4xl font-bold sm:text-5xl lg:text-6xl" style={{ color: GOLD_LIGHT }}>·</span>
-          <h2 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <span className="hidden sm:inline text-4xl font-bold sm:text-5xl lg:text-6xl" style={{ color: GOLD_LIGHT }}>·</span>
+          <h2 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Championship
           </h2>
         </div>
@@ -199,7 +260,7 @@ function HeroSection({ onNav }) {
           </div>
         </div>
         <div className={`hero-stagger mt-12 flex justify-center ${revealed ? 'hero-reveal' : ''}`} style={stagger(5)}>
-          <span className="animate-bounce-soft inline-block text-white/70" aria-hidden>↓</span>
+          <span className="animate-bounce-soft inline-block text-3xl sm:text-4xl lg:text-5xl text-white/80" aria-hidden>↓</span>
         </div>
       </div>
     </div>
@@ -215,6 +276,21 @@ const BADMINTON_IMAGES = {
   groundCourt1: 'https://images.unsplash.com/photo-1609710228159-0fa9bd7c0827?w=600&q=80',
   groundCourt2: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&q=80',
   groundCourt3: 'https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?w=600&q=80',
+  shuttlerTower: 'https://images.unsplash.com/photo-1614058585909-031fc6e4f0bb?q=80&w=692&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle2: 'https://images.unsplash.com/photo-1623998021722-b934f73081df?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle3: 'https://images.unsplash.com/photo-1721760886638-01553f3d8aa9?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle4: 'https://images.unsplash.com/photo-1564226803380-91139fdcb4d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle5: 'https://images.unsplash.com/photo-1625480859582-03ea1d0e88fe?q=80&w=1261&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle6Verticle: 'https://images.unsplash.com/photo-1722003183126-35f4f31ab5b3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle7BG: 'https://images.unsplash.com/photo-1598019465428-5228050eaf7b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  shuttle8Verticle: 'https://images.unsplash.com/photo-1748323850985-80e5cd0a1b4e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  playerBlur: 'https://images.unsplash.com/photo-1761286753856-2f39b4413c1c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  player2Blur: 'https://images.unsplash.com/photo-1761286753703-570ed91dd90e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  player3: 'https://plus.unsplash.com/premium_photo-1664304753883-923c28de6b85?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  playersGroup: 'https://images.unsplash.com/photo-1723534862765-5760900d68d8?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  roundeImg: 'https://images.unsplash.com/photo-1723633236252-eb7badabb34c?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  player4: 'https://images.unsplash.com/photo-1720515226352-b0b1dec6813b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  community: 'https://images.unsplash.com/photo-1757937603164-6ea2539075c7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 };
 const USER_IMAGES = [
   'https://images.unsplash.com/photo-1626721105368-a69248e93b32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -225,22 +301,22 @@ const USER_IMAGES = [
 ];
 const WHY_CARDS = [
   { icon: 'check', title: 'World-Class Athletes', body: 'Watch the top 64 ranked players compete for glory and the championship title.', img: BADMINTON_IMAGES.players },
-  { icon: 'vip', title: 'Premium Experience', body: 'VIP lounges, meet & greet sessions, and exclusive behind-the-scenes access.', img: USER_IMAGES[1] },
-  { icon: 'heritage', title: 'Rich Heritage', body: 'Celebrating 25 years of excellence in international badminton competition.', img: USER_IMAGES[2] },
+  { icon: 'vip', title: 'Premium Experience', body: 'VIP lounges, meet & greet sessions, and exclusive behind-the-scenes access.', img: BADMINTON_IMAGES.playersGroup },
+  { icon: 'heritage', title: 'Rich Heritage', body: 'Celebrating 25 years of excellence in international badminton competition.', img: BADMINTON_IMAGES.shuttlerTower },
 ];
 
 function PlaceToGrowSection({ onNav }) {
   const [ref, revealed] = useReveal();
   return (
-    <div className="excellence-bg relative min-h-screen flex items-center">
+    <div className="excellence-bg relative min-h-screen flex items-center py-12 sm:py-16 lg:py-20">
       <div className="excellence-backdrop absolute inset-0" />
-      <div className="relative mx-auto max-w-[1800px] w-full px-3 sm:px-4 lg:px-6">
+      <div className="relative mx-auto max-w-[1800px] w-full px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`excellence-content text-center ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <p className="text-sm font-medium uppercase tracking-widest text-white/60">Why Attend</p>
-          <h2 className="mt-2 text-4xl font-bold text-white lg:text-5xl">Experience Excellence</h2>
-          <p className="mt-4 text-lg text-white/85">Shuttle Masters Championship 2025 — August 15-22, Singapore</p>
+          <p className="font-inter text-xs sm:text-sm font-medium uppercase tracking-widest text-white/60">Why Attend</p>
+          <h2 className="mt-2 text-2xl sm:text-4xl lg:text-5xl font-bold text-white">Experience Excellence</h2>
+          <p className="mt-3 sm:mt-4 text-base sm:text-lg text-white/85">Shuttle Masters Championship 2025 — August 15-22, Singapore</p>
         </div>
-        <div className={`mt-12 grid gap-8 sm:grid-cols-3 stagger-children ${revealed ? 'revealed' : ''}`}>
+        <div className={`mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-3 stagger-children ${revealed ? 'revealed' : ''}`}>
           {WHY_CARDS.map((card) => (
             <WhyCard key={card.title} iconType={card.icon} title={card.title} body={card.body} img={card.img} />
           ))}
@@ -274,48 +350,48 @@ function WhyCard({ iconType, title, body, img }) {
     <div className="excellence-card group relative aspect-[4/4.2] overflow-hidden rounded-2xl border border-slate-300/50 shadow-xl">
       <img src={img} alt="" className="excellence-card-img absolute inset-0 h-full w-full object-cover object-bottom brightness-[0.75]" />
       <div className="excellence-card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/98 via-slate-950/75 to-slate-900/50" />
-      <div className="absolute inset-0 flex flex-col justify-end p-6">
-        <div className="excellence-card-icon z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-amber-400/40" style={{ backgroundColor: GOLD_LIGHT, color: '#0f172a' }}>
+      <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
+        <div className="excellence-card-icon z-10 mb-3 sm:mb-4 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-amber-400/40" style={{ backgroundColor: GOLD_LIGHT, color: '#0f172a' }}>
           {icons[iconType] || icons.check}
         </div>
-        <h3 className="excellence-card-title text-xl font-bold text-white">{title}</h3>
-        <p className="excellence-card-desc mt-2 text-sm leading-relaxed text-white/90">{body}</p>
+        <h3 className="excellence-card-title text-lg sm:text-xl font-bold text-white">{title}</h3>
+        <p className="excellence-card-desc mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-white/90">{body}</p>
       </div>
     </div>
   );
 }
 
 const TOURNAMENT_ROUNDS = [
-  { code: 'R1', title: 'Round of 64', date: 'Aug 15-16', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Opening rounds featuring all 64 players across 8 courts', img: USER_IMAGES[0] },
+  { code: 'R1', title: 'Round of 64', date: 'Aug 15-16', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Opening rounds featuring all 64 players across 8 courts', img: BADMINTON_IMAGES.roundeImg },
   { code: 'R2', title: 'Round of 32', date: 'Aug 17-18', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Intense matches as the competition heats up', img: USER_IMAGES[1] },
-  { code: 'QF', title: 'Quarter Finals', date: 'Aug 19-20', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Top 8 players battle for semi-final spots', img: USER_IMAGES[2] },
+  { code: 'QF', title: 'Quarter Finals', date: 'Aug 19-20', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Top 8 players battle for semi-final spots', img: USER_IMAGES[0] },
   { code: 'SF', title: 'Semi Finals', date: 'Aug 21', time: 'All Day', location: 'Royal Badminton Arena', desc: 'Four elite players compete for the finals', img: USER_IMAGES[3] },
 ];
 
 function TournamentAgendaSection({ onNav }) {
   const [ref, revealed] = useReveal();
   return (
-    <div className="section-light py-20 lg:py-28">
-      <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
+    <div className="section-dark py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`text-center ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <p className="text-sm font-medium uppercase tracking-widest text-slate-500">Tournament Details</p>
-          <h2 className="text-4xl font-bold text-slate-900 lg:text-6xl">The Competition</h2>
-          <p className="mt-4 text-lg text-slate-600">Shuttle Masters Championship — August 15-22, 2025</p>
+          <p className="font-inter text-xs sm:text-sm font-medium uppercase tracking-widest text-white/50">Tournament Details</p>
+          <h2 className="text-2xl sm:text-4xl lg:text-6xl font-bold text-white">The Competition</h2>
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/70">Shuttle Masters Championship — August 15-22, 2025</p>
         </div>
-        <div className={`mt-12 grid gap-6 sm:grid-cols-2 stagger-children ${revealed ? 'revealed' : ''}`}>
+        <div className={`mt-8 sm:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 stagger-children ${revealed ? 'revealed' : ''}`}>
           {TOURNAMENT_ROUNDS.map((ev) => (
-            <div key={ev.code} className="agenda-card card-hover shimmer-hover flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg md:flex-row md:h-[380px]">
-              <div className="agenda-card-content flex flex-1 flex-col justify-between p-8 md:p-10">
+            <div key={ev.code} className="agenda-card card-hover shimmer-hover flex flex-col overflow-hidden rounded-2xl border md:flex-row md:h-[380px]" style={{ borderColor: BORDER, backgroundColor: BG_CARD }}>
+              <div className="agenda-card-content flex flex-1 flex-col justify-between p-5 sm:p-8 md:p-10">
                 <div>
-                  <span className="inline-block rounded-lg px-3 py-1.5 text-xs font-bold text-slate-950" style={{ backgroundColor: GOLD_LIGHT }}>{ev.code}</span>
-                  <h3 className="mt-4 text-xl font-bold text-slate-900">{ev.title}</h3>
-                  <p className="mt-2 text-slate-600">{ev.desc}</p>
-                  <p className="mt-4 text-sm font-medium text-slate-700">{ev.date} · {ev.time}</p>
-                  <p className="text-sm text-slate-600">{ev.location}</p>
+                  <span className="inline-block rounded-md sm:rounded-lg px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold" style={{ backgroundColor: GOLD_LIGHT, color: BG_DARK }}>{ev.code}</span>
+                  <h3 className="mt-3 sm:mt-4 text-lg sm:text-xl font-bold text-white">{ev.title}</h3>
+                  <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-white/70">{ev.desc}</p>
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm font-medium text-white/80">{ev.date} · {ev.time}</p>
+                  <p className="text-xs sm:text-sm text-white/60">{ev.location}</p>
                 </div>
-                <button type="button" onClick={() => onNav('tournament')} className="btn-outline-gold mt-6 w-fit rounded-lg border-2 px-5 py-2.5 text-sm font-semibold shimmer-hover" style={{ borderColor: GOLD_LIGHT, color: GOLD_LIGHT }}>View Schedule</button>
+                <button type="button" onClick={() => onNav('tournament')} className="btn-outline-gold mt-4 sm:mt-6 w-fit rounded-md sm:rounded-lg border-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold shimmer-hover" style={{ borderColor: GOLD_LIGHT, color: GOLD_LIGHT }}>View Schedule</button>
               </div>
-              <div className="agenda-card-img relative h-64 w-full overflow-hidden md:h-auto md:w-[45%]">
+              <div className="agenda-card-img relative h-48 sm:h-64 w-full overflow-hidden md:h-auto md:w-[45%]">
                 <img src={ev.img} alt="" className="img-zoom h-full w-full object-cover" />
               </div>
             </div>
@@ -344,7 +420,7 @@ function TournamentAgendaSection({ onNav }) {
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1200&q=80"
+              src="https://images.unsplash.com/photo-1721760886982-3c643f05813d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt=""
               className="h-full w-full object-cover"
             />
@@ -414,18 +490,18 @@ function TournamentAgendaSection({ onNav }) {
 function BannerSection({ onNav }) {
   const [ref, revealed] = useReveal();
   return (
-    <div className="relative overflow-hidden bg-stripes min-h-screen flex items-center">
-      <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
-        <div ref={ref} className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div className="relative overflow-hidden bg-stripes min-h-screen flex items-center py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
+        <div ref={ref} className="grid items-center gap-8 sm:gap-10 lg:gap-16 lg:grid-cols-2">
           <div className={`${revealed ? 'reveal-left revealed' : 'reveal-left'}`}>
-            <h2 className="text-4xl font-bold leading-tight text-white lg:text-5xl">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-white">
               Join our badminton community and grow together with players and have fun on court every week
             </h2>
-            <p className="mt-4 text-lg text-white/80">Shuttle Masters Championship — August 15-22, 2025 · Royal Badminton Arena, Singapore</p>
-            <button type="button" onClick={() => onNav('tournament')} className="btn-gold shimmer-hover mt-8 rounded-lg px-8 py-3.5 text-base font-semibold text-slate-950" style={{ backgroundColor: GOLD_LIGHT }}>View Tournament</button>
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/80">Shuttle Masters Championship — August 15-22, 2025 · Royal Badminton Arena, Singapore</p>
+            <button type="button" onClick={() => onNav('tournament')} className="btn-gold shimmer-hover mt-6 sm:mt-8 rounded-lg px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold text-slate-950" style={{ backgroundColor: GOLD_LIGHT }}>View Tournament</button>
           </div>
-          <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl ${revealed ? 'reveal-right revealed' : 'reveal-right'}`}>
-            <img src={USER_IMAGES[4]} alt="" className="img-zoom h-full w-full object-cover" />
+          <div className={`relative aspect-[4/3] overflow-hidden rounded-xl sm:rounded-2xl ${revealed ? 'reveal-right revealed' : 'reveal-right'}`}>
+            <img src={BADMINTON_IMAGES.community} alt="" className="img-zoom h-full w-full object-cover" />
           </div>
         </div>
       </div>
@@ -440,7 +516,7 @@ const SCHEDULE_CARDS = [
     days: 'Friday & Saturday',
     time: '07.00 PM - 09.00 PM',
     venue: 'Royal Badminton Arena, Singapore',
-    img: USER_IMAGES[0],
+    img: BADMINTON_IMAGES.player4,
     overlay: 'linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(15, 23, 42, 0.4) 100%)',
   },
   {
@@ -449,7 +525,7 @@ const SCHEDULE_CARDS = [
     days: 'Saturday & Sunday',
     time: '08.00 PM - 11.00 PM',
     venue: 'Royal Badminton Arena, Singapore',
-    img: USER_IMAGES[1],
+    img: BADMINTON_IMAGES.playerBlur,
     overlay: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(15, 23, 42, 0.45) 100%)',
   },
 ];
@@ -496,7 +572,7 @@ function PickYourTimeSection() {
   const [ref, revealed] = useReveal();
   return (
     <div
-      className="relative min-h-screen flex items-center"
+      className="relative min-h-screen flex items-center py-12 sm:py-20 lg:py-28"
       style={{
         backgroundColor: '#0f172a',
         backgroundImage: `url(${USER_IMAGES[4]})`,
@@ -505,28 +581,28 @@ function PickYourTimeSection() {
       }}
     >
       <div className="absolute inset-0 bg-slate-900/85" />
-      <div className="relative z-10 mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
+      <div className="relative z-10 mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`text-left ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <p className="text-sm font-medium uppercase tracking-widest text-white/55">Weekly Schedule</p>
-          <h2 className="mt-2 text-4xl font-bold text-white lg:text-5xl">Pick Your Perfect Time</h2>
+          <p className="font-inter text-xs sm:text-sm font-medium uppercase tracking-widest text-white/55">Weekly Schedule</p>
+          <h2 className="mt-2 text-2xl sm:text-4xl lg:text-5xl font-bold text-white">Pick Your Perfect Time</h2>
         </div>
-        <div className={`mt-12 grid gap-8 sm:grid-cols-2 stagger-children ${revealed ? 'revealed' : ''}`}>
+        <div className={`mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 sm:grid-cols-2 stagger-children ${revealed ? 'revealed' : ''}`}>
           {SCHEDULE_CARDS.map((card) => (
             <div
               key={card.titleLine1 + card.titleLine2}
-              className="schedule-card card-hover group flex flex-col overflow-hidden rounded-3xl transition-all duration-300 md:flex-row md:min-h-[450px]"
-              style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.4)' }}
+              className="schedule-card card-hover group flex flex-col overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-300 md:flex-row md:min-h-[400px] lg:min-h-[450px]"
+              style={{ boxShadow: '0 16px 48px rgba(0,0,0,0.3)' }}
             >
               <div
-                className="flex flex-1 flex-col justify-between p-8 md:p-10"
+                className="flex flex-1 flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10"
                 style={{ backgroundColor: '#0f172a' }}
               >
                 <div>
-                  <h3 className="text-2xl font-bold leading-tight text-white md:text-3xl">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight text-white">
                     <span className="block">{card.titleLine1}</span>
                     <span className="block">{card.titleLine2}</span>
                   </h3>
-                  <ul className="mt-6 space-y-4 text-sm font-medium text-white/95">
+                  <ul className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 text-xs sm:text-sm font-medium text-white/95">
                     <li className="flex items-center gap-3">
                       <span className="text-white/90"><IconScheduleCalendar /></span>
                       {card.days}
@@ -569,13 +645,13 @@ function PickYourTimeSection() {
 function BuiltToImproveSection({ onNav }) {
   const [ref, revealed] = useReveal();
   const features = [
-    { title: 'World-Class Athletes', body: 'Top 64 ranked players compete for the championship title.', img: USER_IMAGES[0] },
+    { title: 'World-Class Athletes', body: 'Top 64 ranked players compete for the championship title.', img: BADMINTON_IMAGES.player3 },
     { title: 'Premium Experience', body: 'VIP lounges, meet & greet sessions, and exclusive access.', img: USER_IMAGES[1] },
     { title: 'Rich Heritage', body: 'Celebrating 25 years of international badminton excellence.', img: USER_IMAGES[2] },
   ];
   const ImproveCard = ({ item, isCta }) => (
     <div
-      className={`improve-card group relative flex min-h-[480px] flex-col overflow-hidden rounded-2xl border border-slate-200 shadow-lg transition-all duration-500 hover:shadow-2xl ${isCta ? 'cursor-pointer' : ''}`}
+      className={`improve-card group relative flex min-h-[380px] sm:min-h-[420px] lg:min-h-[480px] flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200 shadow-lg transition-all duration-500 hover:shadow-2xl ${isCta ? 'cursor-pointer' : ''}`}
       onClick={isCta ? () => onNav('players') : undefined}
       onKeyDown={isCta ? (e) => e.key === 'Enter' && onNav('players') : undefined}
       role={isCta ? 'button' : undefined}
@@ -583,21 +659,21 @@ function BuiltToImproveSection({ onNav }) {
     >
       <img src={item.img} alt="" className="improve-card-bg absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
       <div className="improve-card-overlay absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-900/30 transition-all duration-500" />
-      <div className="relative mt-auto p-8 transform transition-transform duration-500 group-hover:-translate-y-2">
-        <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-        <p className="mt-3 text-base leading-relaxed text-white/90">{item.body}</p>
-        {isCta && <span className="mt-4 inline-block text-base font-semibold transition-all duration-300 group-hover:translate-x-2" style={{ color: GOLD_LIGHT }}>View Details →</span>}
+      <div className="relative mt-auto p-5 sm:p-6 lg:p-8 transform transition-transform duration-500 group-hover:-translate-y-2">
+        <h3 className="text-lg sm:text-xl font-semibold text-white">{item.title}</h3>
+        <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-relaxed text-white/90">{item.body}</p>
+        {isCta && <span className="mt-3 sm:mt-4 inline-block text-sm sm:text-base font-semibold transition-all duration-300 group-hover:translate-x-2" style={{ color: GOLD_LIGHT }}>View Details →</span>}
       </div>
     </div>
   );
   return (
-    <div className="section-light min-h-screen flex items-center">
-      <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
+    <div className="section-dark min-h-screen flex items-center py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`w-full ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <h2 className="text-center text-4xl font-bold text-slate-900 lg:text-5xl">Built to Help You Improve</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-slate-600">Experience excellence at Shuttle Masters Championship 2025</p>
+          <h2 className="text-center text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white">Built to Help You Improve</h2>
+          <p className="mx-auto mt-3 sm:mt-4 max-w-2xl text-center text-sm sm:text-base lg:text-lg text-white/70">Experience excellence at Shuttle Masters Championship 2025</p>
         </div>
-        <div className={`mt-12 grid gap-6 lg:grid-cols-4 stagger-children ${revealed ? 'revealed' : ''}`}>
+        <div className={`mt-8 sm:mt-12 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 stagger-children ${revealed ? 'revealed' : ''}`}>
           {features.map((f) => (
             <ImproveCard key={f.title} item={f} isCta={false} />
           ))}
@@ -617,38 +693,38 @@ function FeaturedPlayersSection() {
     { seed: '#4 SEED', name: 'Shi Yu Qi', country: 'China', flag: '🇨🇳', rank: '4', points: '89,440', img: 'https://images.unsplash.com/photo-1626225015999-2e53f6aaa008?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
   ];
   return (
-    <div className="section-light min-h-screen flex items-center">
-      <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
+    <div className="section-dark min-h-screen flex items-center py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`text-center w-full ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <h2 className="text-4xl font-bold text-slate-900 lg:text-5xl">Featured Players</h2>
-          <p className="mt-4 text-lg text-slate-600">Elite athletes competing at Shuttle Masters Championship 2025</p>
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white">Featured Players</h2>
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/70">Elite athletes competing at Shuttle Masters Championship 2025</p>
         </div>
-        <div className={`mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 stagger-children ${revealed ? 'revealed' : ''}`}>
+        <div className={`mt-8 sm:mt-12 grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 lg:grid-cols-4 stagger-children ${revealed ? 'revealed' : ''}`}>
           {players.map((p) => (
-            <div key={p.name} className="player-card group relative overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-              <div className="relative h-[450px] overflow-hidden">
+            <div key={p.name} className="player-card group relative overflow-hidden rounded-xl sm:rounded-2xl shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+              <div className="relative h-[250px] sm:h-[350px] lg:h-[400px] xl:h-[450px] overflow-hidden">
                 <img src={p.img} alt={p.name} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-slate-900/20" />
-                <span className="absolute left-4 top-4 rounded-full px-3 py-1.5 text-xs font-bold text-slate-950 backdrop-blur-sm" style={{ backgroundColor: GOLD_LIGHT }}>  {p.seed}</span>
-                <div className="absolute bottom-0 left-0 right-0 p-6 backdrop-blur-md bg-slate-950/30">
-                  <p className="text-lg font-bold text-white">{p.name}</p>
-                  <p className="mt-2 text-sm text-white/90">{p.country}</p>
-                  <p className="mt-3 text-xs text-white/70">Rank {p.rank} · {p.points} pts</p>
+                <span className="absolute left-2 sm:left-4 top-2 sm:top-4 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-slate-950 backdrop-blur-sm" style={{ backgroundColor: GOLD_LIGHT }}>{p.seed}</span>
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 lg:p-6 backdrop-blur-md bg-slate-950/30">
+                  <p className="text-sm sm:text-base lg:text-lg font-bold text-white">{p.name}</p>
+                  <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-white/90">{p.country}</p>
+                  <p className="font-inter mt-1.5 sm:mt-3 text-[10px] sm:text-xs text-white/70">Rank {p.rank} · {p.points} pts</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-34 pb-50 overflow-hidden">
-          <h3 className="mb-12 text-center text-4xl font-bold text-slate-900">Participating Nations</h3>
+        <div className="mt-16 sm:mt-24 lg:mt-34 pb-12 sm:pb-16 lg:pb-20 overflow-hidden">
+          <h3 className="mb-8 sm:mb-12 text-center text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Participating Nations</h3>
           <div className="marquee-container relative">
             <div className="marquee flex">
               {[...Array(4)].map((_, setIndex) => (
                 <div key={setIndex} className="marquee-content flex shrink-0">
                   {[['Denmark', 'DK'], ['China', 'CN'], ['Japan', 'JP'], ['Indonesia', 'ID'], ['Malaysia', 'MY'], ['Thailand', 'TH'], ['India', 'IN'], ['South Korea', 'KR']].map(([name, code]) => (
-                    <span key={`${setIndex}-${name}`} className="flex shrink-0 items-center gap-3 rounded-xl border border-slate-200 bg-white px-6 py-4 text-base font-medium text-slate-700 shadow-md mx-2">
-                      <span className="text-2xl">{String.fromCodePoint(...code.split('').map(c => 127397 + c.charCodeAt(0)))}</span>
-                      {name}
+                    <span key={`${setIndex}-${name}`} className="flex shrink-0 items-center gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-slate-200/20 bg-white/10 backdrop-blur-sm px-3 sm:px-5 lg:px-6 py-2 sm:py-3 lg:py-4 text-xs sm:text-sm lg:text-base font-medium text-white shadow-md mx-1 sm:mx-2">
+                      <span className="text-lg sm:text-xl lg:text-2xl">{String.fromCodePoint(...code.split('').map(c => 127397 + c.charCodeAt(0)))}</span>
+                      <span className="hidden sm:inline">{name}</span>
                     </span>
                   ))}
                 </div>
@@ -656,14 +732,14 @@ function FeaturedPlayersSection() {
             </div>
           </div>
           {/* Second row - Different nations, reverse direction */}
-          <div className="marquee-container relative mt-6">
+          <div className="marquee-container relative mt-3 sm:mt-6">
             <div className="marquee-reverse flex">
               {[...Array(4)].map((_, setIndex) => (
                 <div key={setIndex} className="marquee-content flex shrink-0">
                   {[['Taiwan', 'TW'], ['Vietnam', 'VN'], ['Singapore', 'SG'], ['Hong Kong', 'HK'], ['Philippines', 'PH'], ['England', 'GB'], ['Spain', 'ES'], ['Germany', 'DE']].map(([name, code]) => (
-                    <span key={`${setIndex}-${name}`} className="flex shrink-0 items-center gap-3 rounded-xl border border-slate-200 bg-white px-6 py-4 text-base font-medium text-slate-700 shadow-md mx-2">
-                      <span className="text-2xl">{String.fromCodePoint(...code.split('').map(c => 127397 + c.charCodeAt(0)))}</span>
-                      {name}
+                    <span key={`${setIndex}-${name}`} className="flex shrink-0 items-center gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-slate-200/20 bg-white/10 backdrop-blur-sm px-3 sm:px-5 lg:px-6 py-2 sm:py-3 lg:py-4 text-xs sm:text-sm lg:text-base font-medium text-white shadow-md mx-1 sm:mx-2">
+                      <span className="text-lg sm:text-xl lg:text-2xl">{String.fromCodePoint(...code.split('').map(c => 127397 + c.charCodeAt(0)))}</span>
+                      <span className="hidden sm:inline">{name}</span>
                     </span>
                   ))}
                 </div>
@@ -679,11 +755,11 @@ function FeaturedPlayersSection() {
 function ArticleCornerSection() {
   const [ref, revealed] = useReveal();
   const articles = [
-    { title: 'Fastest Racket Sport', body: 'Shuttlecocks can travel over 400 km/h (249 mph), making badminton the fastest racket sport in the world.', img: USER_IMAGES[0] },
-    { title: 'Feathered Shuttles', body: 'Professional shuttlecocks use 16 goose feathers and can be destroyed after just one rally.', img: USER_IMAGES[1] },
+    { title: 'Fastest Racket Sport', body: 'Shuttlecocks can travel over 400 km/h (249 mph), making badminton the fastest racket sport in the world.', img: BADMINTON_IMAGES.playersGroup },
+    { title: 'Feathered Shuttles', body: 'Professional shuttlecocks use 16 goose feathers and can be destroyed after just one rally.', img: BADMINTON_IMAGES.shuttle5 },
   ];
   return (
-    <div className="section-dark min-h-screen flex items-center py-20 lg:py-28">
+    <div className="section-dark min-h-screen flex items-center py-12 sm:py-20 lg:py-28">
       <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
         <div ref={ref} className={`text-center ${revealed ? 'reveal revealed' : 'reveal'}`}>
           <h2 className="text-4xl font-bold text-white lg:text-5xl">Did You Know?</h2>
@@ -691,8 +767,8 @@ function ArticleCornerSection() {
         </div>
         <div className={`mt-12 grid gap-8 sm:grid-cols-2 stagger-children ${revealed ? 'revealed' : ''}`}>
           {articles.map((a) => (
-            <div key={a.title} className="group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-              <div className="relative aspect-video overflow-hidden">
+            <div key={a.title} className="group relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+              <div className="relative aspect-[3/4] sm:aspect-video overflow-hidden">
                 <img src={a.img} alt="" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-slate-900/30" />
               </div>
@@ -748,7 +824,7 @@ function HistoryTimelineSection() {
   const items = [
     { year: 'Ancient Origins', title: 'The Beginning', body: "Battledore and shuttlecock, badminton's ancestor, was played in ancient Greece, China, Japan, and India for over 2,000 years.", img: USER_IMAGES[0] },
     { year: '1870s', title: 'Birth of Modern Badminton', body: 'British army officers in India developed the modern rules. The game was named after Badminton House in Gloucestershire, England.', img: USER_IMAGES[1] },
-    { year: '1992', title: 'Olympic Debut', body: 'Badminton became an official Olympic sport at the Barcelona Games.', img: USER_IMAGES[2] },
+    { year: '1992', title: 'Olympic Debut', body: 'Badminton became an official Olympic sport at the Barcelona Games.', img: BADMINTON_IMAGES.roundeImg },
     { year: 'Today', title: 'Global Phenomenon', body: 'Over 220 million players worldwide, dominated by Asian nations in professional competition.', img: USER_IMAGES[3] },
   ];
   const TimelineCard = ({ item, side, index }) => {
@@ -770,27 +846,34 @@ function HistoryTimelineSection() {
     );
   };
   return (
-    <div ref={sectionRef} className="section-light min-h-screen py-20 lg:py-28">
+    <div ref={sectionRef} className="section-dark min-h-screen py-12 sm:py-20 lg:py-28">
       <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-4 lg:px-6">
         <div className="mx-auto max-w-5xl">
           <div ref={ref} className={`text-center ${revealed ? 'reveal revealed' : 'reveal'}`}>
-            <h2 className="text-4xl font-bold text-slate-900 lg:text-5xl">History of Badminton</h2>
-            <p className="mt-4 text-lg text-slate-600">A journey through centuries of racket sport excellence</p>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white">History of Badminton</h2>
+            <p className="mt-3 sm:mt-4 text-base sm:text-lg text-white/70">A journey through centuries of racket sport excellence</p>
           </div>
           <div className="relative mt-16">
-            <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-slate-200" />
+            <div className="hidden sm:block absolute left-1/2 top-0 h-full w-px -translate-x-1/2" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />
             <div
-              className="timeline-progress absolute left-1/2 top-0 w-px -translate-x-1/2 transition-[height] duration-150 ease-out"
+              className="hidden sm:block timeline-progress absolute left-1/2 top-0 w-px -translate-x-1/2 transition-[height] duration-150 ease-out"
               style={{ height: `${lineProgress * 100}%`, backgroundColor: GOLD_LIGHT }}
               aria-hidden
             />
-            <div className="space-y-16">
+            {/* Mobile yellow line - positioned on left */}
+            <div
+              className="sm:hidden absolute left-4 top-0 w-px transition-[height] duration-150 ease-out"
+              style={{ height: `${lineProgress * 100}%`, backgroundColor: GOLD_LIGHT }}
+              aria-hidden
+            />
+            <div className="space-y-8 sm:space-y-16">
               {items.map((item, i) => (
-                <div key={item.year} className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-8">
+                <div key={item.year} className="grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_auto_1fr] items-stretch gap-4 sm:gap-8">
                   <div className={i % 2 === 0 ? 'text-right' : ''}>
                     {i % 2 === 0 ? <TimelineCard item={item} side="left" index={i} /> : null}
                   </div>
-                  <div className="relative z-10 flex w-4 items-center justify-center">
+                  {/* Timeline dot - hidden on mobile */}
+                  <div className="hidden sm:flex relative z-10 w-4 items-center justify-center">
                     <span
                       className="h-5 w-5 rounded-full border-2 bg-white shadow-lg transition-all duration-500"
                       style={{
@@ -816,17 +899,17 @@ function HistoryTimelineSection() {
 function ContactSection() {
   const [ref, revealed] = useReveal();
   return (
-    <div className="section-dark py-20 lg:py-28">
-      <div className="mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-6">
+    <div className="section-dark py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div ref={ref} className={`text-center ${revealed ? 'reveal revealed' : 'reveal'}`}>
-          <h2 className="text-4xl font-bold text-white lg:text-5xl">Contact Us</h2>
-          <p className="mt-4 text-lg text-white/70">Get in touch with the Shuttle Masters Championship team</p>
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white">Contact Us</h2>
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/70">Get in touch with the Shuttle Masters Championship team</p>
         </div>
-        <div className="mt-14 grid gap-10 lg:grid-cols-2">
+        <div className="mt-8 sm:mt-12 lg:mt-14 grid gap-6 sm:gap-8 lg:gap-10 lg:grid-cols-2">
           {/* Tournament Office */}
-          <div className="rounded-2xl border p-12 transition-smooth h-full flex flex-col" style={{ borderColor: BORDER, backgroundColor: BG_CARD }}>
-            <h3 className="text-2xl font-bold text-white">Tournament Office</h3>
-            <div className="mt-10 space-y-8 flex-1">
+          <div className="rounded-2xl border p-6 sm:p-10 lg:p-12 transition-smooth h-full flex flex-col" style={{ borderColor: BORDER, backgroundColor: BG_CARD }}>
+            <h3 className="text-xl sm:text-2xl font-bold text-white">Tournament Office</h3>
+            <div className="mt-6 sm:mt-10 space-y-6 sm:space-y-8 flex-1">
               <ContactRow icon={<IconPin />} label="Venue" lines={['Royal Badminton Arena', '1 Stadium Drive', 'Singapore 397629']} />
               <ContactRow icon={<IconMail />} label="Email" lines={['info@shuttlemasters.com', 'tickets@shuttlemasters.com']} />
               <ContactRow icon={<IconPhone />} label="Phone" lines={['+65 6123 4567', 'Mon-Fri: 9AM - 6PM SGT']} />
@@ -840,22 +923,22 @@ function ContactSection() {
           </div>
 
           {/* Send a Message Form */}
-          <div className="rounded-2xl border p-12 transition-smooth h-full flex flex-col" style={{ borderColor: BORDER, backgroundColor: BG_CARD }}>
-            <h3 className="text-2xl font-bold text-white">Send a Message</h3>
-            <form className="mt-10 space-y-6 flex-1 flex flex-col">
+          <div className="rounded-2xl border p-6 sm:p-10 lg:p-12 transition-smooth h-full flex flex-col" style={{ borderColor: BORDER, backgroundColor: BG_CARD }}>
+            <h3 className="text-xl sm:text-2xl font-bold text-white">Send a Message</h3>
+            <form className="mt-6 sm:mt-10 space-y-5 sm:space-y-6 flex-1 flex flex-col">
               <LabeledInput label="Full Name" placeholder="Your name" />
               <LabeledInput label="Email" placeholder="your@email.com" type="email" />
               <div>
-                <label className="mb-2 block text-sm font-medium text-white/70">Subject</label>
-                <select className="h-12 w-full rounded-lg border bg-transparent px-4 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} defaultValue="General Inquiry">
+                <label className="form-label mb-2 block text-white/70">Subject</label>
+                <select className="form-input h-12 w-full rounded-lg border bg-transparent px-4 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} defaultValue="General Inquiry">
                   <option className="bg-slate-900">General Inquiry</option>
                   <option className="bg-slate-900">Ticket Information</option>
                   <option className="bg-slate-900">Media &amp; Press</option>
                 </select>
               </div>
               <div className="flex-1">
-                <label className="mb-2 block text-sm font-medium text-white/70">Message</label>
-                <textarea rows={5} className="w-full h-full min-h-[120px] resize-none rounded-lg border bg-transparent px-4 py-3 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} placeholder="How can we help?" />
+                <label className="form-label mb-2 block text-white/70">Message</label>
+                <textarea rows={5} className="form-input w-full h-full min-h-[120px] resize-none rounded-lg border bg-transparent px-4 py-3 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} placeholder="How can we help?" />
               </div>
               <button type="button" className="btn-gold h-14 w-full rounded-lg font-semibold text-lg text-slate-950 mt-auto" style={{ backgroundColor: GOLD_LIGHT }}>Send Message</button>
             </form>
@@ -891,8 +974,8 @@ function SocialBtn({ ariaLabel, icon }) {
 function LabeledInput({ label, placeholder, type }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-white/70">{label}</label>
-      <input type={type} className="h-12 w-full rounded-lg border bg-transparent px-4 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} placeholder={placeholder} />
+      <label className="form-label mb-2 block text-white/70">{label}</label>
+      <input type={type} className="form-input h-12 w-full rounded-lg border bg-transparent px-4 text-white/90 outline-none transition-smooth" style={{ borderColor: BORDER }} placeholder={placeholder} />
     </div>
   );
 }
@@ -940,7 +1023,7 @@ function Footer({ onNav }) {
           </nav>
 
           {/* Right - Copyright */}
-          <p className="text-sm text-white/60">© 2025 Shuttle Masters. All rights reserved.</p>
+          <p className="font-inter text-sm text-white/60">© 2025 Shuttle Masters. All rights reserved.</p>
         </div>
       </div>
     </footer>
